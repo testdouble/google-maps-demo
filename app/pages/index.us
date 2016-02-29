@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= pkg.name %></title>
+
+    <link rel="stylesheet" type="text/css" href="<%= css %>" media="all" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="map"></div>
+      <div id="list">
+        <div class="item">
+          <div class="description">Some work order</div>
+          <div class="address">123 Marburry Ln</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU6E5ojbGLcdxZRMRIKIn30WyMqluTHeg&callback=App.initMap"
+    async defer></script>
+    <script type="text/javascript" src="<%= js %>"></script>
+  </body>
+</html>
