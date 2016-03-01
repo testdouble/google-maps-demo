@@ -11,6 +11,9 @@ class App.List
 
   toArray: -> @items
 
+  groupedByAddress: ->
+    new App.List(_(@items).groupBy (item) -> "#{item.address}, #{item.city}, #{item.state}")
+
   each: (predicate) ->
     _(@items).each(predicate)
 
@@ -44,10 +47,6 @@ class App.Item
     _.extend this,
       marker: null
     , attrs
-
-  createMarker: (position) ->
-    marker = new App.Marker position, =>
-      JST['app/templates/info-window.us'](this)
 
 class App.Marker
   constructor: (position, infoWindowContentCreator) ->
@@ -89,11 +88,11 @@ App.initMap = ->
 
     renderLists(workOrders)
 
-    workOrders.each (order) ->
-      address = "#{order.address}, #{order.city}, #{order.state}"
+    workOrders.groupedByAddress().each (orderGroup, address) ->
       App.google.geocoder.geocode {address}, (results, status) ->
         return console.log('failed to find', address, 'with', status) unless status == google.maps.GeocoderStatus.OK
-        order.createMarker(results[0].geometry.location)
+        new App.Marker results[0].geometry.location, =>
+          JST['app/templates/info-window.us'](orders: orderGroup)
 
   renderLists = (orders) ->
     $('#lists').html(JST['app/templates/lists.us']
