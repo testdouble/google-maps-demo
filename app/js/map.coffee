@@ -2,7 +2,6 @@ window.App ||= {}
 
 App.google =
   map: null
-  geocoder: null
   infowWindow: null
 
 class App.List
@@ -70,7 +69,6 @@ App.initMap = ->
       lat: 40
       lng: -83
     zoom: 11
-  App.google.geocoder = new google.maps.Geocoder()
   App.google.infoWindow = new google.maps.InfoWindow()
 
   selectedWorkOrders = new App.List()
