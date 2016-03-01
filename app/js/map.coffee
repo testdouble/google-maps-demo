@@ -60,6 +60,9 @@ class App.Marker
       App.google.infoWindow.setContent(infoWindowContentCreator())
       App.google.infoWindow.open(App.google.map, @marker)
 
+  remove: ->
+    @marker.setMap(null)
+
 App.listFor = (array) ->
   new App.List(_(array).map (attrs) ->
     new App.Item(attrs)
@@ -83,11 +86,11 @@ App.initMap = ->
       renderMarkers(workOrders)
       renderLists(selectedWorkOrders, workOrders)
 
-    $('#map').on 'click', 'button.add-to-route', (e) ->
+    $('#app').on 'click', 'button.add-to-route', (e) ->
       workOrder = workOrders.findById($(e.target).data('id'))
       selectedWorkOrders.append(workOrder)
       App.google.infoWindow.close()
-      workOrder.marker.marker.setMap(null)
+      workOrder.marker.remove()
       renderLists(selectedWorkOrders, workOrders)
 
     renderMarkers(workOrders)
