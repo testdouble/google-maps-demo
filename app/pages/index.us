@@ -11,7 +11,7 @@
       <div id="lists"></div>
     </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU6E5ojbGLcdxZRMRIKIn30WyMqluTHeg&callback=App.initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyCU6E5ojbGLcdxZRMRIKIn30WyMqluTHeg&callback=App.initMap"
     async defer></script>
     <script type="text/javascript" src="<%= js %>"></script>
   </body>

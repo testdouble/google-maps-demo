@@ -32,6 +32,13 @@ class App.List
   findById: (id) ->
     _(@items).find (i) -> id == i.id
 
+  sortBy: (property) ->
+    @items = _(@items).sortBy (i) ->
+      if _(i[property]).isFunction()
+        i[property]()
+      else
+        i[property]
+
   # Create a new list without the items in the other list
   without: (otherItems) ->
     others = if _(otherItems).isArray() then otherItems else otherItems.toArray()
@@ -44,6 +51,12 @@ class App.Item
     _.extend this,
       marker: null
     , attrs
+
+  distance: ->
+    google.maps.geometry.spherical.computeDistanceBetween(
+      App.google.map.getCenter(),
+      @marker.getPosition()
+    )
 
   createMarker: (position) ->
     @marker = new App.Marker this, =>
@@ -65,6 +78,9 @@ class App.Marker
 
   add: ->
     @marker.setMap(App.google.map)
+
+  getPosition: ->
+    @marker.getPosition()
 
 App.listFor = (array) ->
   new App.List(_(array).map (attrs) ->
@@ -100,6 +116,10 @@ App.initMap = ->
       workOrder = workOrders.findById($(e.target).data('id'))
       selectedWorkOrders.remove(workOrder)
       workOrder.marker.add()
+      renderLists(selectedWorkOrders, workOrders)
+
+    $('#lists').on 'click', '#not-selected-orders .sort button', (e) ->
+      workOrders.sortBy($(e.target).data('sortBy'))
       renderLists(selectedWorkOrders, workOrders)
 
     renderMarkers(workOrders)
