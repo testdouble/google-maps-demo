@@ -46,7 +46,7 @@ class App.Item
     , attrs
 
   createMarker: (position) ->
-    marker = new App.Marker this, =>
+    @marker = new App.Marker this, =>
       JST['app/templates/info-window.us'](this)
 
 class App.Marker
@@ -59,6 +59,9 @@ class App.Marker
       @marker.setZIndex(App.google.lowZIndex--)
       App.google.infoWindow.setContent(infoWindowContentCreator())
       App.google.infoWindow.open(App.google.map, @marker)
+
+  remove: ->
+    @marker.setMap(null)
 
 App.listFor = (array) ->
   new App.List(_(array).map (attrs) ->
@@ -80,20 +83,26 @@ App.initMap = ->
 
     $('#lists').on 'click', 'button.reset', ->
       selectedWorkOrders.reset()
-      renderLists(workOrders)
+      renderMarkers(workOrders)
+      renderLists(selectedWorkOrders, workOrders)
 
-    $('#map').on 'click', 'button.add-to-route', (e) ->
-      selectedWorkOrders.append(workOrders.findById($(e.target).data('id')))
+    $('#app').on 'click', 'button.add-to-route', (e) ->
+      workOrder = workOrders.findById($(e.target).data('id'))
+      selectedWorkOrders.append(workOrder)
       App.google.infoWindow.close()
-      renderLists(workOrders)
+      workOrder.marker.remove()
+      renderLists(selectedWorkOrders, workOrders)
 
-    renderLists(workOrders)
+    renderMarkers(workOrders)
+    renderLists(selectedWorkOrders, workOrders)
 
+  renderMarkers = (workOrders) ->
     workOrders.each (order) ->
       order.createMarker()
 
-  renderLists = (orders) ->
+  renderLists = (selectedWorkOrders, workOrders) ->
+    unselectedWorkOrders = workOrders.without(selectedWorkOrders)
     $('#lists').html(JST['app/templates/lists.us']
       selected: selectedWorkOrders
-      notSelected: orders.without(selectedWorkOrders)
+      notSelected: unselectedWorkOrders
     )
