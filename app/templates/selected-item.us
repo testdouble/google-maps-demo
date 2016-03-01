@@ -1,0 +1,6 @@
+<div class="item">
+  <div class="description"><%= description %></div>
+  <div class="location">
+    <%= address %>, <%= city %>, <%= state %>
+  </div>
+</div>
