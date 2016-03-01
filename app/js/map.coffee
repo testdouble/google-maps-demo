@@ -3,6 +3,7 @@ window.App ||= {}
 App.google =
   map: null
   infoWindow: null
+  lowZIndex: 0
 
 class App.List
   constructor: (items = []) ->
@@ -55,6 +56,7 @@ class App.Marker
       position: position
 
     @marker.addListener 'click', =>
+      @marker.setZIndex(App.google.lowZIndex--)
       App.google.infoWindow.setContent(infoWindowContentCreator())
       App.google.infoWindow.open(App.google.map, @marker)
 
