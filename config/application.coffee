@@ -19,7 +19,3 @@ module.exports = (lineman) ->
   prependTasks:
     common: app.prependTasks.common.concat("sass")
 
-  concat_sourcemap:
-    options:
-      sourcesContent: false
-
