@@ -3,4 +3,5 @@
   <div class="location">
     <%= address %>, <%= city %>, <%= state %>
   </div>
+  <button class="remove-from-route" data-id="<%= id %>">Remove from route</button>
 </div>
