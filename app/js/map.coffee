@@ -1,47 +1,107 @@
 window.App ||= {}
 
+App.google =
+  map: null
+  geocoder: null
+  infowWindow: null
+
+class App.List
+  constructor: (items = []) ->
+    @items = items
+
+  toArray: -> @items
+
+  each: (predicate) ->
+    _(@items).each(predicate)
+
+  append: (items...) ->
+    @items = _(@items.concat(items)).uniq()
+
+  reset: ->
+    @items = []
+
+  remove: (item) ->
+    @items = _(@items).reject (i) -> item.id == i.id
+
+  include: (item) ->
+    @find(item)?
+
+  find: (item) ->
+    _(@items).find (i) -> item.id == i.id
+
+  findById: (id) ->
+    _(@items).find (i) -> id == i.id
+
+  indexOf: (item) ->
+    _(@items).findIndexOf (i) -> item.id == i.id
+
+  # Create a new list without the items in the other list
+  without: (otherItems) ->
+    others = if _(otherItems).isArray() then otherItems else otherItems.toArray()
+    new App.List _(@items).reject (i) ->
+      _(others).find (o) -> o.id == i.id
+
+
+
+class App.Item
+  constructor: (attrs) ->
+    _.extend this,
+      selected: false
+      marker: null
+    , attrs
+
+  createMarker: (position) ->
+    marker = new App.Marker position, =>
+      JST['app/templates/info-window.us'](this)
+
+class App.Marker
+  constructor: (position, infoWindowContentCreator) ->
+    @marker = new google.maps.Marker
+      map: App.google.map
+      position: position
+
+    @marker.addListener 'click', =>
+      App.google.infoWindow.setContent(infoWindowContentCreator())
+      App.google.infoWindow.open(App.google.map, @marker)
+
+App.listFor = (array) ->
+  new App.List(_(array).map (attrs) ->
+    new App.Item(attrs)
+  )
+
 App.initMap = ->
-  map = new google.maps.Map $('#map')[0],
+  App.google.map = new google.maps.Map $('#map')[0],
     center:
       lat: 40
       lng: -83
     zoom: 11
-  geocoder = new google.maps.Geocoder()
-  infoWindow = new google.maps.InfoWindow
+  App.google.geocoder = new google.maps.Geocoder()
+  App.google.infoWindow = new google.maps.InfoWindow()
 
-  selectedWorkOrders = []
+  selectedWorkOrders = new App.List()
 
   $.get '/api/work-orders', (data) ->
-    workOrders = data.workOrders
+    workOrders = App.listFor(data.workOrders)
 
     $('#lists').on 'click', 'button.reset', ->
-      selectedWorkOrders = []
+      selectedWorkOrders.reset()
       renderLists(workOrders)
 
     $('#map').on 'click', 'button.add-to-route', (e) ->
-      selectedWorkOrders.push($(e.target).data('id'))
-      infoWindow.close()
+      selectedWorkOrders.append(workOrders.findById($(e.target).data('id')))
+      App.google.infoWindow.close()
       renderLists(workOrders)
 
     renderLists(workOrders)
 
-    _.each workOrders, (order) ->
+    workOrders.each (order) ->
       address = "#{order.address}, #{order.city}. #{order.state}"
-      geocoder.geocode {address}, (results, status) ->
-        return console.log('failed to find', status) unless status == google.maps.GeocoderStatus.OK
-        _(new google.maps.Marker
-          map: map
-          position: results[0].geometry.location).tap (marker) ->
-            marker.addListener 'click', ->
-              infoWindow.setContent(JST['app/templates/info-window.us'](order))
-              infoWindow.open(map, marker)
+      App.google.geocoder.geocode {address}, (results, status) ->
+        return console.log('failed to find', address, 'with', status) unless status == google.maps.GeocoderStatus.OK
+        order.createMarker(results[0].geometry.location)
 
   renderLists = (orders) ->
     $('#lists').html(JST['app/templates/lists.us']
-      selected: _(orders).chain().select (o) ->
-          _(selectedWorkOrders).include(o.id)
-        .sortBy (o) ->
-          selectedWorkOrders.indexOf(o.id)
-        .value()
-      notSelected: _(orders).reject (o) -> _(selectedWorkOrders).include(o.id)
+      selected: selectedWorkOrders
+      notSelected: orders.without(selectedWorkOrders)
     )
