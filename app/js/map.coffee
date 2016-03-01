@@ -2,7 +2,6 @@ window.App ||= {}
 
 App.google =
   map: null
-  geocoder: null
   infowWindow: null
 
 class App.List
@@ -70,7 +69,6 @@ App.initMap = ->
       lat: 40
       lng: -83
     zoom: 11
-  App.google.geocoder = new google.maps.Geocoder()
   App.google.infoWindow = new google.maps.InfoWindow()
 
   selectedWorkOrders = new App.List()
@@ -91,9 +89,7 @@ App.initMap = ->
 
     workOrders.each (order) ->
       address = "#{order.address}, #{order.city}, #{order.state}"
-      App.google.geocoder.geocode {address}, (results, status) ->
-        return console.log('failed to find', address, 'with', status) unless status == google.maps.GeocoderStatus.OK
-        order.createMarker(results[0].geometry.location)
+      order.createMarker(new google.maps.LatLng(order.lat, order.lng))
 
   renderLists = (orders) ->
     $('#lists').html(JST['app/templates/lists.us']
