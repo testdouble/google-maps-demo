@@ -1,4 +1,5 @@
 window.App ||= {}
+
 App.initMap = ->
   map = new google.maps.Map $('#map')[0],
     center:
@@ -6,9 +7,9 @@ App.initMap = ->
       lng: -83
     zoom: 11
   geocoder = new google.maps.Geocoder()
+  infoWindow = new google.maps.InfoWindow
 
   selectedWorkOrders = []
-
 
   $.get '/api/work-orders', (data) ->
     workOrders = data.workOrders
@@ -19,6 +20,7 @@ App.initMap = ->
 
     $('#map').on 'click', 'button.add-to-route', (e) ->
       selectedWorkOrders.push($(e.target).data('id'))
+      infoWindow.close()
       renderLists(workOrders)
 
     renderLists(workOrders)
@@ -31,9 +33,8 @@ App.initMap = ->
           map: map
           position: results[0].geometry.location).tap (marker) ->
             marker.addListener 'click', ->
-              new google.maps.InfoWindow
-                content: JST['app/templates/info-window.us'](order)
-              .open(map, marker)
+              infoWindow.setContent(JST['app/templates/info-window.us'](order))
+              infoWindow.open(map, marker)
 
   renderLists = (orders) ->
     $('#lists').html(JST['app/templates/lists.us']
