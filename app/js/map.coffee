@@ -46,7 +46,7 @@ class App.Item
     , attrs
 
   createMarker: (position) ->
-    marker = new App.Marker position, =>
+    marker = new App.Marker this, =>
       JST['app/templates/info-window.us'](this)
 
 class App.Marker
@@ -90,10 +90,7 @@ App.initMap = ->
     renderLists(workOrders)
 
     workOrders.each (order) ->
-      address = "#{order.address}, #{order.city}, #{order.state}"
-      App.google.geocoder.geocode {address}, (results, status) ->
-        return console.log('failed to find', address, 'with', status) unless status == google.maps.GeocoderStatus.OK
-        order.createMarker(results[0].geometry.location)
+      order.createMarker()
 
   renderLists = (orders) ->
     $('#lists').html(JST['app/templates/lists.us']
