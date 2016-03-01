@@ -1,0 +1,9 @@
+<div class="item">
+  Info about work order:
+  <div class="description"><%= description %></div>
+  <div class="location">
+    <%= address %>, <%= city %>, <%= state %>
+  </div>
+</div>
+
+

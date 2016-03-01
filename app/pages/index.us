@@ -9,10 +9,6 @@
     <div id="app">
       <div id="map"></div>
       <div id="list">
-        <div class="item">
-          <div class="description">Some work order</div>
-          <div class="address">123 Marburry Ln</div>
-        </div>
       </div>
     </div>
 
