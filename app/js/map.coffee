@@ -15,7 +15,7 @@ class App.List
     _(@items).each(predicate)
 
   append: (items...) ->
-    @items = _(@items.concat(items)).uniq()
+    @items = _(@items.concat(items)).uniq (i) -> i.id
 
   reset: ->
     @items = []
@@ -39,11 +39,9 @@ class App.List
       _(others).find (o) -> o.id == i.id
 
 
-
 class App.Item
   constructor: (attrs) ->
     _.extend this,
-      selected: false
       marker: null
     , attrs
 
