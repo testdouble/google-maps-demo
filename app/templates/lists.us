@@ -1,14 +1,14 @@
 <div id="not-selected-orders">
   <h2>Unselected Work Orders</h2>
   <% notSelected.each(function(order){ %>
-    <%= JST['app/templates/item.us'](order) %>
+    <%= JST['app/templates/unselected-item.us'](order) %>
   <% }) %>
 </div>
 
 <div id="selected-orders">
   <h2>Selected Work Orders</h2>
   <% selected.each(function(order){ %>
-    <%= JST['app/templates/item.us'](order) %>
+    <%= JST['app/templates/selected-item.us'](order) %>
   <% }) %>
 </div>
 
