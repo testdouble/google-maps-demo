@@ -32,9 +32,6 @@ class App.List
   findById: (id) ->
     _(@items).find (i) -> id == i.id
 
-  indexOf: (item) ->
-    _(@items).findIndexOf (i) -> item.id == i.id
-
   # Create a new list without the items in the other list
   without: (otherItems) ->
     others = if _(otherItems).isArray() then otherItems else otherItems.toArray()
@@ -95,7 +92,7 @@ App.initMap = ->
     renderLists(workOrders)
 
     workOrders.each (order) ->
-      address = "#{order.address}, #{order.city}. #{order.state}"
+      address = "#{order.address}, #{order.city}, #{order.state}"
       App.google.geocoder.geocode {address}, (results, status) ->
         return console.log('failed to find', address, 'with', status) unless status == google.maps.GeocoderStatus.OK
         order.createMarker(results[0].geometry.location)
