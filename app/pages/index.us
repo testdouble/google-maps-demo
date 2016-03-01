@@ -8,8 +8,7 @@
   <body>
     <div id="app">
       <div id="map"></div>
-      <div id="list">
-      </div>
+      <div id="lists"></div>
     </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU6E5ojbGLcdxZRMRIKIn30WyMqluTHeg&callback=App.initMap"

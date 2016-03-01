@@ -4,6 +4,7 @@
   <div class="location">
     <%= address %>, <%= city %>, <%= state %>
   </div>
+  <button class="add-to-route" data-id="<%= id %>">Add to route</button>
 </div>
 
 

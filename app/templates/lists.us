@@ -1,0 +1,15 @@
+<div id="not-selected-orders">
+  <h2>Unselected Work Orders</h2>
+  <% _(notSelected).each(function(order){ %>
+    <%= JST['app/templates/item.us'](order) %>
+  <% }) %>
+</div>
+
+<div id="selected-orders">
+  <h2>Selected Work Orders</h2>
+  <% _(selected).each(function(order){ %>
+    <%= JST['app/templates/item.us'](order) %>
+  <% }) %>
+</div>
+
+<button class="reset">Reset selections</button>
