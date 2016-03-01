@@ -2,7 +2,7 @@ window.App ||= {}
 
 App.google =
   map: null
-  infowWindow: null
+  infoWindow: null
 
 class App.List
   constructor: (items = []) ->
