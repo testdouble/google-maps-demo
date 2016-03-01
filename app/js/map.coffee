@@ -80,6 +80,7 @@ App.initMap = ->
 
     $('#lists').on 'click', 'button.reset', ->
       selectedWorkOrders.reset()
+      renderMarkers(workOrders)
       renderLists(selectedWorkOrders, workOrders)
 
     $('#map').on 'click', 'button.add-to-route', (e) ->
