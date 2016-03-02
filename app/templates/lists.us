@@ -1,5 +1,11 @@
 <div id="not-selected-orders">
   <h2>Unselected Work Orders</h2>
+  <div class="sort">
+    <button data-sort-by="distance">Distance from Center</button>
+    <button data-sort-by="soldAt">Sell Date</button>
+    <button data-sort-by="scheduledAt">Scheduled Date</button>
+  </div>
+
   <% notSelected.each(function(order){ %>
     <%= JST['app/templates/unselected-item.us'](order) %>
   <% }) %>
