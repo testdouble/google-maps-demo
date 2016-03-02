@@ -11,8 +11,8 @@ class App.List
 
   toArray: -> @items
 
-  map: (predicate) ->
-    _(@items).map(predicate)
+  ids: ->
+    _(@items).pluck('id')
 
   each: (predicate) ->
     _(@items).each(predicate)
@@ -109,7 +109,7 @@ App.initMap = ->
       renderLists(selectedWorkOrders, workOrders)
 
     $('#lists').on 'click', 'button.complete', =>
-      $.post('/api/schedules', workOrders: selectedWorkOrders)
+      $.post('/api/schedules', workOrders: selectedWorkOrders.ids())
         .done (data) =>
           workOrders = App.listFor(data.workOrders)
           selectedWorkOrders = new App.List()
