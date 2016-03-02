@@ -8,3 +8,6 @@ module.exports = drawRoutes: (app) ->
       { id: 2, description: "Easton", address: "160 Easton Town Center", city: "Columbus", state: "OH", lat: 40.04985670000001, lng: -82.9156888, soldAt: new Date(2015, 11, 20), scheduledAt: new Date(2016, 2, 3)}
       { id: 3, description: "Starbucks", address: "6470 Sawmill Rd", city: "Columbus", state: "OH", lat: 40.1005337, lng: -83.09104589999998, soldAt: new Date(2016, 0, 15), scheduledAt: new Date(2016, 2, 5)}
     ]
+
+  app.post '/api/work-lists', (req, res) ->
+    res.send(201)

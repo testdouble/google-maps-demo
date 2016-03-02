@@ -11,6 +11,9 @@ class App.List
 
   toArray: -> @items
 
+  ids: ->
+    _(@items).pluck('id')
+
   each: (predicate) ->
     _(@items).each(predicate)
 
@@ -101,6 +104,12 @@ App.initMap = ->
       selectedWorkOrders.reset()
       renderMarkers(workOrders)
       renderLists(selectedWorkOrders, workOrders)
+
+    $('#lists').on 'click', 'button.complete', =>
+      $.post '/api/work-lists', {workOrders: selectedWorkOrders.ids()}, ->
+        workOrders = workOrders.without(selectedWorkOrders)
+        selectedWorkOrders = new App.List()
+        renderLists(selectedWorkOrders, workOrders)
 
     $('#app').on 'click', 'button.add-to-route', (e) ->
       workOrder = workOrders.findById($(e.target).data('id'))
