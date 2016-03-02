@@ -19,3 +19,4 @@
 </div>
 
 <button class="reset">Reset selections</button>
+<button class="complete">Complete selections</button>

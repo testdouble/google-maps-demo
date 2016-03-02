@@ -11,6 +11,9 @@ class App.List
 
   toArray: -> @items
 
+  map: (predicate) ->
+    _(@items).map(predicate)
+
   each: (predicate) ->
     _(@items).each(predicate)
 
@@ -104,6 +107,16 @@ App.initMap = ->
       selectedWorkOrders.reset()
       renderMarkers(workOrders)
       renderLists(selectedWorkOrders, workOrders)
+
+    $('#lists').on 'click', 'button.complete', =>
+      $.post('/api/schedules', workOrders: selectedWorkOrders)
+        .done (data) =>
+          workOrders = App.listFor(data.workOrders)
+          selectedWorkOrders = new App.List()
+          renderMarkers(workOrders)
+          renderLists(selectedWorkOrders, workOrders)
+        .fail ->
+          alert 'Schedule completion failed, please try again.'
 
     $('#app').on 'click', 'button.add-to-route', (e) ->
       workOrder = workOrders.findById($(e.target).data('id'))
