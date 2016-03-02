@@ -34,7 +34,10 @@ class App.List
 
   sortBy: (property) ->
     @items = _(@items).sortBy (i) ->
-      i[property]?() || i[property]
+      if _(i[property]).isFunction()
+        i[property]()
+      else
+        i[property]
 
   # Create a new list without the items in the other list
   without: (otherItems) ->
