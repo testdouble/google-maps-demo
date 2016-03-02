@@ -9,9 +9,5 @@ module.exports = drawRoutes: (app) ->
       { id: 3, description: "Starbucks", address: "6470 Sawmill Rd", city: "Columbus", state: "OH", lat: 40.1005337, lng: -83.09104589999998, soldAt: new Date(2016, 0, 15), scheduledAt: new Date(2016, 2, 5)}
     ]
 
-  app.post '/api/schedules', (req, res) ->
-    res.json workOrders: [
-      { id: 6, description: "different Cbus10", address: "10 W Broad ST", city: "Columbus", state: "OH", lat: 39.9625079, lng: -83.00121009999998, soldAt: new Date(2016, 2, 4), scheduledAt: new Date(2016, 2, 10)},
-      { id: 7, description: "different Easton", address: "160 Easton Town Center", city: "Columbus", state: "OH", lat: 40.04985670000001, lng: -82.9156888, soldAt: new Date(2016, 2, 5), scheduledAt: new Date(2016, 2, 11)}
-      { id: 8, description: "different Starbucks", address: "6470 Sawmill Rd", city: "Columbus", state: "OH", lat: 40.1005337, lng: -83.09104589999998, soldAt: new Date(2016, 2, 6), scheduledAt: new Date(2016, 2, 12)}
-    ]
+  app.post '/api/work-lists', (req, res) ->
+    res.send(201)

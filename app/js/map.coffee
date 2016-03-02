@@ -109,14 +109,10 @@ App.initMap = ->
       renderLists(selectedWorkOrders, workOrders)
 
     $('#lists').on 'click', 'button.complete', =>
-      $.post('/api/schedules', workOrders: selectedWorkOrders.ids())
-        .done (data) =>
-          workOrders = App.listFor(data.workOrders)
-          selectedWorkOrders = new App.List()
-          renderMarkers(workOrders)
-          renderLists(selectedWorkOrders, workOrders)
-        .fail ->
-          alert 'Schedule completion failed, please try again.'
+      $.post '/api/work-lists', {workOrders: selectedWorkOrders.ids()}, ->
+        workOrders = workOrders.without(selectedWorkOrders)
+        selectedWorkOrders = new App.List()
+        renderLists(selectedWorkOrders, workOrders)
 
     $('#app').on 'click', 'button.add-to-route', (e) ->
       workOrder = workOrders.findById($(e.target).data('id'))
